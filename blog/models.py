@@ -23,6 +23,9 @@ class Comment(models.Model):
   content_object = GenericForeignKey('content_type', 
                                      'object_id'
                                      )
+  
+  def __str__(self) -> str:
+      return f'{self.pk}({self.content[:40]}) -> {self.object_id}'
 
 
 class Post(models.Model):
