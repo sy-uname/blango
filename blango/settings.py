@@ -73,6 +73,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+        # 'libraries': {
+        #     'filter_tags': 'blog.templatetags.blog_extras',
+        #     },
     },
 ]
 
