@@ -172,7 +172,7 @@ class Dev(Configuration):
         "root": {
             "handlers": ["console"],
             "level": "DEBUG",
-            }
+            },
         }    
     
 class Prod(Dev):

@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
 import logging
 from blog.models import Post
 from blog.forms import CommentForm
