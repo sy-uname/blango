@@ -3,7 +3,12 @@
 {% block navbar %}
   <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Blango</a>
+      {% if request.user.is_active %}
+      <a class="navbar-brand" href="{% url 'blog-profile' %}">Blango</a>
+      {% else %}
+      <a class="navbar-brand" href="{% url "django_registration_register" %}">Register</a>
+      <a class="nav-link" href="{% url "login" %}">Log In</a>
+      {% endif %}
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">

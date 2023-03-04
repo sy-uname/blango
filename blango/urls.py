@@ -21,6 +21,7 @@ import debug_toolbar
 
 urlpatterns = [
     path('', include('blog.urls')),
+    path("accounts/", include("blango_auth.urls")),
     path('admin/', admin.site.urls),
 ]
 
