@@ -17,6 +17,14 @@
 
 {% row "justify-content-center" %}
     {% col "col-md-6" %}
+        <p>
+            <a href="{% url 'google_login' %}">Log in with Google</a>
+        </p>
+    {% endcol %}
+{% endrow %}
+
+{% row "justify-content-center" %}
+    {% col "col-md-6" %}
         <form method="post" action="{% url "login" %}">
         {% csrf_token %}
         {{ form|crispy }}
