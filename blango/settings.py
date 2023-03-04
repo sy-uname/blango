@@ -57,6 +57,7 @@ class Dev(Configuration):
         'django.contrib.staticfiles',
         'crispy_forms', 
         'crispy_bootstrap5',
+        'blango_auth',
         'blog',
         'debug_toolbar',
     ]
@@ -100,7 +101,18 @@ class Dev(Configuration):
     # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
     DATABASES = {
-        'default': dj_database_url.config(default=f"sqlite:///{str(BASE_DIR / 'db.sqlite3')}"),
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'CONN_MAX_AGE' : None,
+            'OPTIONS': {
+                'read_default_file': str(BASE_DIR / 'my.cnf'),
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
+            'TEST': {
+                'NAME': 'meta4BED4littlelemonTest'
+            }
+        },
+        'django_default': dj_database_url.config(default=f"sqlite:///{str(BASE_DIR / 'db.sqlite3')}"),
     }
 
 
@@ -178,6 +190,8 @@ class Dev(Configuration):
             "level": "DEBUG",
             },
         }    
+    
+    AUTH_USER_MODEL = "blango_auth.User"
     
     
 class Prod(Dev):
