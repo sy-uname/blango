@@ -16,3 +16,4 @@ class CommentForm(forms.ModelForm):
                                      'Submit'
                                      )
                               )
+

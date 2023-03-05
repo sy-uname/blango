@@ -32,10 +32,9 @@ class Dev(Configuration):
     ALLOWED_HOSTS = values.ListValue(['*'])
     
     INTERNAL_IPS = values.ListValue(['127.0.0.1'])
-    
-    
+
     CSRF_COOKIE_SAMESITE = None
-    CSRF_TRUSTED_ORIGINS = ['https://' + os.environ.get('CODIO_HOSTNAME','localhost') + '-8000.codio.io',
+    CSRF_TRUSTED_ORIGINS = ['https://' + os.environ.get('CODIO_HOSTNAME', 'localhost') + '-8000.codio.io',
                             "https://*.ngrok.io",
                             ]
     CSRF_COOKIE_SECURE = True
@@ -102,14 +101,13 @@ class Dev(Configuration):
 
     WSGI_APPLICATION = 'blango.wsgi.application'
 
-
     # Database
     # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'CONN_MAX_AGE' : None,
+            'CONN_MAX_AGE': None,
             'OPTIONS': {
                 'read_default_file': str(BASE_DIR / 'my.cnf'),
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -120,7 +118,6 @@ class Dev(Configuration):
         },
         'django_default': dj_database_url.config(default=f"sqlite:///{str(BASE_DIR / 'db.sqlite3')}"),
     }
-
 
     # Password validation
     # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -163,7 +160,6 @@ class Dev(Configuration):
     USE_L10N = True
 
     USE_TZ = True
-
 
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/3.2/howto/static-files/

@@ -1,6 +1,6 @@
 from django.urls import path, include
-from blango_auth.views import profile
 from django_registration.backends.activation.views import RegistrationView
+from blango_auth.views import profile
 from blango_auth.forms import BlangoRegistrationForm
 
 urlpatterns = [
@@ -14,3 +14,4 @@ urlpatterns = [
         ),
     path("", include("django_registration.backends.activation.urls")),
 ]
+

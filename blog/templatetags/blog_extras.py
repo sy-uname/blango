@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 register = template.Library()
 user_model = get_user_model()
 
+
 @register.simple_tag(takes_context=True)
 def author_details_tag(context):
     request = context["request"]
@@ -24,7 +25,7 @@ def author_details_tag(context):
 
 
 @register.filter
-def author_details(user, currrent_user = None):        
+def author_details(user, currrent_user=None):
     return author_details_api(user, currrent_user)        
     
     
@@ -73,3 +74,4 @@ def recent_posts(post):
     posts = Post.objects.exclude(pk=post.pk)[:5]
     logger.debug("Loaded %d recent posts for post %d", len(posts), post.pk)
     return {"title": "Recent Posts", "posts": posts}
+
