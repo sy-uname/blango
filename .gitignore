@@ -11,3 +11,4 @@ blango/__pycache__/
 blog/templatetags/__pycache__/
 blango_auth/__pycache__/
 blango_auth/migrations/__pycache__/
+blog/api/__pycache__/

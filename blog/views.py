@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
     # posts = Post.objects.filter(published_at__lte=timezone.now())
-    posts = Post.objects.all().order_by("-published_at")
+    posts = Post.objects.all().exclude(published_at__isnull = True).order_by("-published_at")
     logger.debug("Got %d posts", len(posts))
     return render(request, "blog/index.html", {"posts": posts})
 

@@ -65,6 +65,7 @@ class Dev(Configuration):
         'allauth.account',
         'allauth.socialaccount',
         'allauth.socialaccount.providers.google',
+        'rest_framework',
     ]
 
     MIDDLEWARE = [
@@ -212,6 +213,8 @@ class Dev(Configuration):
     ACCOUNT_USERNAME_REQUIRED = False
     ACCOUNT_AUTHENTICATION_METHOD = "email"
     ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+
+    APPEND_SLASH = False
 
 
 class Prod(Dev):
