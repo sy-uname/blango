@@ -3,112 +3,126 @@
 {% load blog_extras %}
 
 {% block content %}
-  <h2>Blog Posts</h2>
-  {% for post in posts %}
-  {% row "border-bottom" %}
-      <div class="col">
-          <h3>{{ post.title }}</h3>
-          {% include "blog/post-byline.html" %}
-          <p>{{ post.summary }}</p>
-          <p>
-              ({{ post.content|wordcount }} words)
-              <a href="{% url 'blog-post-detail' post.pk %}">Read More</a>
-          </p>
-      </div>
-  {% endrow %}
-  {% endfor %}
-  <h2>Index Template</h2>
-  <div class="row" style="height: 100px;">
-    <div class="col-sm-12 col-md-6 bg-primary"> </div>
-    <div class="col-sm-12 col-md-6 bg-secondary"> </div>
-  </div>
-  <div class="row" style="height: 100px;">
-    <div class="col-sm-6 col-md-3 bg-success"> </div>
-    <div class="col-sm-6 col-md-3 bg-warning"> </div>
-    <div class="col-sm-12 col-md-6 bg-info"> </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12 col-md-8 col-lg-4 bg-primary">Column 1</div>
-    <div class="col-sm-12 col-md-4 col-lg-8 bg-danger">Column 2</div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12 col-sm-10 col-md-6 bg-primary">Column 1</div>
-    <div class="col-xs-12 col-sm-2 col-md-2 bg-danger">Column 2</div>
-    <div class="col bg-success">Column 3</div>
-  </div>
-  <div class="row">
-    <div class="col-md bg-primary">Column 1</div>
-    <div class="col-md bg-danger">Column 2</div>
-    <div class="col-md bg-success">Column 3</div>
-  </div>
-  <div class="row">
-    <div class="col-8 bg-primary">Column 1</div>
-    <div class="col bg-danger">Column 2</div>
-    <div class="col bg-success">Column 3</div>
-  </div>
-  <div class="row">
-    <div class="col bg-primary">Column 1</div>
-    <div class="col bg-danger">Column 2</div>
-    <div class="col bg-success">Column 3</div>
-  </div>
-  <p></p>
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#example-modal">Open Modal</button>
+<h2>Blog Posts</h2>
+{% for post in posts %}
+    {% row "border-bottom" %}
+        {% col %}
+            <h3>{{ post.title }}</h3>
+            {% include "blog/post-byline.html" %}
+            <p>{{ post.summary }}</p>
+            <p>
+                ({{ post.content|wordcount }} words)
+                <a href="{% url 'blog-post-detail' post.pk %}">Read More</a>
+            </p>
+        {% endcol %}
+    {% endrow %}
+{% endfor %}
+<h2>
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#IndexTemplate"
+            aria-expanded="false" aria-controls="IndexTemplate">
+        Index Template
+    </button>
+</h2>
+<div class="collapse" id="IndexTemplate">
+    <div class="card card-body bg-dark text-light">
+        <div class="row" style="height: 100px;">
+            <div class="col-sm-12 col-md-6 bg-primary"></div>
+            <div class="col-sm-12 col-md-6 bg-secondary"></div>
+        </div>
+        <div class="row" style="height: 100px;">
+            <div class="col-sm-6 col-md-3 bg-success"></div>
+            <div class="col-sm-6 col-md-3 bg-warning"></div>
+            <div class="col-sm-12 col-md-6 bg-info"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-8 col-lg-4 bg-primary">Column 1</div>
+            <div class="col-sm-12 col-md-4 col-lg-8 bg-danger">Column 2</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-10 col-md-6 bg-primary">Column 1</div>
+            <div class="col-xs-12 col-sm-2 col-md-2 bg-danger">Column 2</div>
+            <div class="col bg-success">Column 3</div>
+        </div>
+        <div class="row">
+            <div class="col-md bg-primary">Column 1</div>
+            <div class="col-md bg-danger">Column 2</div>
+            <div class="col-md bg-success">Column 3</div>
+        </div>
+        <div class="row">
+            <div class="col-8 bg-primary">Column 1</div>
+            <div class="col bg-danger">Column 2</div>
+            <div class="col bg-success">Column 3</div>
+        </div>
+        <div class="row">
+            <div class="col bg-primary">Column 1</div>
+            <div class="col bg-danger">Column 2</div>
+            <div class="col bg-success">Column 3</div>
+        </div>
+        <p></p>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#example-modal">Open
+            Modal
+        </button>
 
-  <div class="modal" id="example-modal" tabindex="-1" aria-labelledby="example-modal-label" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="example-modal-label">Modal Title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal" id="example-modal" tabindex="-1" aria-labelledby="example-modal-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="example-modal-label">Modal Title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">Modal Body</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">Modal Body</div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <p></p>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton1" type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">BootStrap Dropdown
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                    <a class="dropdown-item" href="#">Item 1</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#">Item 2</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#">Item 3</a>
+                </li>
+            </ul>
         </div>
-      </div>
+        <p></p>
+        <button type="button" class="btn btn-primary">Primary</button>
+        <a href="#" class="btn btn-secondary">Secondary</a>
+        <button type="button" class="btn btn-danger">Danger</button>
+        <p></p>
+        <div class="alert alert-success" role="alert">A simple success alert—check it out!</div>
+        <div class="alert alert-danger" role="alert">A simple danger alert—check it out!</div>
+        <div class="alert alert-warning" role="alert">A simple warning alert—check it out!</div>
     </div>
-  </div>
-  <p></p>
-  <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false">BootStrap Dropdown</button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-      <li>
-        <a class="dropdown-item" href="#">Item 1</a>
-      </li>
-      <li>
-        <a class="dropdown-item" href="#">Item 2</a>
-      </li>
-      <li>
-        <a class="dropdown-item" href="#">Item 3</a>
-      </li>
-    </ul>
-  </div>
-  <p></p>
-  <button type="button" class="btn btn-primary">Primary</button>
-  <a href="#" class="btn btn-secondary">Secondary</a>
-  <button type="button" class="btn btn-danger">Danger</button>
-  <p></p>
-  <div class="alert alert-success" role="alert">A simple success alert—check it out!</div>
-  <div class="alert alert-danger" role="alert">A simple danger alert—check it out!</div>
-  <div class="alert alert-warning" role="alert">A simple warning alert—check it out!</div>
+</div>
 {% endblock %}
 
 {% block paginations %}
-  <ul class="pagination">
+<ul class="pagination">
     <li class="page-item disabled">
-      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
     </li>
     <li class="page-item">
-      <a class="page-link" href="#">1</a>
+        <a class="page-link" href="#">1</a>
     </li>
     <li class="page-item active" aria-current="page">
-      <a class="page-link" href="#">2</a>
+        <a class="page-link" href="#">2</a>
     </li>
     <li class="page-item">
-      <a class="page-link" href="#">3</a>
+        <a class="page-link" href="#">3</a>
     </li>
     <li class="page-item">
-      <a class="page-link" href="#">Next</a>
+        <a class="page-link" href="#">Next</a>
     </li>
-  </ul>
+</ul>
 {% endblock %}

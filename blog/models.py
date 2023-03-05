@@ -43,7 +43,7 @@ class Post(models.Model):
                                         db_index = True
                                         )
     title = models.TextField(max_length = 100)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     summary = models.TextField(max_length = 500)
     content = models.TextField()
     tags = models.ManyToManyField(Tag, related_name = "posts")
