@@ -1,12 +1,21 @@
 import logging
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from blog.models import Post, Tag
+from blog.models import Post, Tag, Comment
 
 
 logger = logging.getLogger(__name__)
 
     
+class TagField(serializers.SlugRelatedField):
+    def to_internal_value(self, data):
+        try:
+            logger.debug("TagField with %s", data)
+            return self.get_queryset().get_or_create(value=data.lower())[0]
+        except (TypeError, ValueError):
+            self.fail(f"Tag value {data} is invalid")
+            
+            
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -14,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
         
         
 class PostSerializer(serializers.ModelSerializer):
-    tags = serializers.SlugRelatedField(
+    tags = TagField(
             slug_field="value", many=True, queryset=Tag.objects.all()
     )
 
@@ -32,8 +41,8 @@ class PostSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {
             "author": {
-                "required": False
-            }
+                "required": False,
+            },
         } 
         
     def validate(self, data):
@@ -51,4 +60,38 @@ class PostSerializer(serializers.ModelSerializer):
         logger.debug("author is %s", validate_data['author'])
             
         return validate_data   
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    creator = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ["id", "creator", "content", "modified_at", "created_at"]
+        readonly = ["modified_at", "created_at"]
+        
+                   
+class PostDetailSerializer(PostSerializer):
+    comments = CommentSerializer(many=True, required=False)
+
+    def update(self, instance, validated_data):
+        try:
+            comments = validated_data.pop("comments")
+        except KeyError:
+            comments = dict()
+
+        instance = super(PostDetailSerializer, self).update(instance, validated_data)
+
+        for comment_data in comments:
+            if comment_data.get("id"):
+                # comment has an ID so was pre-existing
+                continue
+            comment = Comment(**comment_data)
+            comment.creator = self.context["request"].user
+            comment.content_object = instance
+            comment.save()
+
+        return instance
     
+                        
