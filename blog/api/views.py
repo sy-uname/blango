@@ -1,76 +1,42 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework import generics, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from blog.api.permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
-from blog.api.serializers import PostSerializer, UserSerializer, PostDetailSerializer
-from blog.models import Post
+from blog.api.serializers import (PostSerializer, 
+                                  UserSerializer, 
+                                  PostDetailSerializer,
+                                  TagSerializer,
+                                  )
+from blog.models import Post, Tag
 
-
-class PostList(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class PostDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostDetailSerializer
-    permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
     
+class PostViewSet(viewsets.ModelViewSet):
+    permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
+    queryset = Post.objects.all()
 
+    def get_serializer_class(self):
+        if self.action in ("list", "create"):
+            return PostSerializer
+        return PostDetailSerializer
+    
+    
 class UserDetail(generics.RetrieveAPIView):
     lookup_field = "email"
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
     
 
-# import logging
-# from http import HTTPStatus
-# from django.urls import reverse
-# from rest_framework.decorators import api_view
-# from rest_framework.response import Response
-# from blog.api.serializers import PostSerializer
-# from blog.models import Post
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
 
-
-# logger = logging.getLogger(__name__)
-
-
-# @api_view(["GET", "POST"])
-# def post_list(request, format=None):
-#     if request.method == "GET":
-#         posts = Post.objects.all()
-#         return Response({"data": PostSerializer(posts, many=True).data})
-#     elif request.method == "POST":
-#         serializer = PostSerializer(data=request.data)
-#         if serializer.is_valid():
-#             post = serializer.save()
-#             return Response(
-#                 status=HTTPStatus.CREATED,
-#                 headers={"Location": reverse("api_post_detail", args=(post.pk,))},
-#             )
-
-#         return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)
-
-
-# @api_view(["GET", "PUT", "DELETE"])
-# def post_detail(request, pk, format=None):
-#     try:
-#         post = Post.objects.get(pk=pk)
-#     except Post.DoesNotExist:
-#         return Response(status=HTTPStatus.NOT_FOUND)
-        
-#     logger.debug("post_detail pk(%d) / request(%s) / data(%s)", pk, str(request), str(request.body), )
-
-#     if request.method == "GET":
-#         return Response(PostSerializer(post).data)
-#     elif request.method == "PUT":
-#         serializer = PostSerializer(post, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(status=HTTPStatus.NO_CONTENT)
-#         return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)
-#     elif request.method == "DELETE":
-#         post.delete()
-#         return Response(status=HTTPStatus.NO_CONTENT)
-
+    @action(methods=["get"], detail=True, name="Posts with the Tag")
+    def posts(self, request, pk=None):
+        tag = self.get_object()
+        post_serializer = PostSerializer(
+            tag.posts, many=True, context={"request": request}
+        )
+        return Response(post_serializer.data)
+    
+    
