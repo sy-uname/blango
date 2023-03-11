@@ -17,10 +17,12 @@ from blog.api.serializers import (PostSerializer,
                                   TagSerializer,
                                   )
 from blog.models import Post, Tag
+from blog.api.filters import PostFilterSet
 
     
 class PostViewSet(viewsets.ModelViewSet):
-    filterset_fields = ["author", "tags"]
+    ordering_fields = ["published_at", "author", "title", "slug"]
+    filterset_class = PostFilterSet
     permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
     queryset = Post.objects.all()
 

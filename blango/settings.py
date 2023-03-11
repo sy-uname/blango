@@ -58,6 +58,7 @@ class Dev(Configuration):
         'django_filters',
         'crispy_forms', 
         'crispy_bootstrap5',
+        'crispy_bootstrap3',
         'blango_auth',
         'blog',
         'debug_toolbar',
@@ -234,7 +235,8 @@ class Dev(Configuration):
             "user_burst": "100/minute",
         },   
         "DEFAULT_FILTER_BACKENDS": [
-            "django_filters.rest_framework.DjangoFilterBackend"
+            "django_filters.rest_framework.DjangoFilterBackend",
+            "rest_framework.filters.OrderingFilter",
         ],
         "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
         "PAGE_SIZE": 100,
