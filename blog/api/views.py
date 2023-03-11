@@ -112,7 +112,7 @@ class TagViewSet(viewsets.ModelViewSet):
     @action(methods=["get"], detail=True, name="Posts with the Tag")
     def posts(self, request, pk=None):
         tag = self.get_object()
-        instance = page = self.paginate_queryset(tag.posts)
+        instance = page = self.paginate_queryset(tag.posts.all())
         if page is None:
             instance = tag.posts
         post_serializer = PostSerializer(

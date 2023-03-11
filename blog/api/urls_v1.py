@@ -5,6 +5,8 @@ from rest_framework.routers import DefaultRouter
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from blog.api.views import PostViewSet, UserDetail, TagViewSet
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 urlpatterns = [
     path("users/<str:email>", UserDetail.as_view(), name="api_user_detail"),
@@ -19,7 +21,12 @@ urlpatterns += [
 urlpatterns += [
     path("token-auth/", views.obtain_auth_token)
 ]
-
+# JWT 
+urlpatterns += [
+    path("jwt/", TokenObtainPairView.as_view(), name="jwt_obtain_pair"),
+    path("jwt/refresh/", TokenRefreshView.as_view(), name="jwt_refresh"),
+]
+    
 schema_view = get_schema_view(
     openapi.Info(
         title="-=Blango API=-",

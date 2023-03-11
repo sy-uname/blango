@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from configurations import Configuration, values
+from datetime import timedelta
 import dj_database_url
 import os
 
@@ -58,7 +59,6 @@ class Dev(Configuration):
         'django_filters',
         'crispy_forms', 
         'crispy_bootstrap5',
-        'crispy_bootstrap3',
         'blango_auth',
         'blog',
         'debug_toolbar',
@@ -221,6 +221,7 @@ class Dev(Configuration):
             "rest_framework.authentication.BasicAuthentication",
             "rest_framework.authentication.SessionAuthentication",
             "rest_framework.authentication.TokenAuthentication",
+            "rest_framework_simplejwt.authentication.JWTAuthentication",
         ],
         "DEFAULT_THROTTLE_CLASSES": [
             "blog.api.throttling.AnonSustainedThrottle",
@@ -242,12 +243,20 @@ class Dev(Configuration):
         "PAGE_SIZE": 100,
     }
 
+# JWT
+    SIMPLE_JWT = {
+        "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+        "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    }
+
     SWAGGER_SETTINGS = {
         "SECURITY_DEFINITIONS": {
             "Token": {"type": "apiKey", "name": "Authorization", "in": "header"},
             "Basic": {"type": "basic"},
         }
     }
+
+
 class Prod(Dev):
 
     # SECURITY WARNING: don't run with debug turned on in production!
