@@ -20,6 +20,7 @@ from blog.models import Post, Tag
 
     
 class PostViewSet(viewsets.ModelViewSet):
+    filterset_fields = ["author", "tags"]
     permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
     queryset = Post.objects.all()
 
@@ -34,9 +35,15 @@ class PostViewSet(viewsets.ModelViewSet):
     @action(methods=["get"], detail=False, name="Posts by the logged in user")
     def mine(self, request):
         if request.user.is_anonymous:
-            raise PermissionDenied("You must be logged in to see which Posts are yours")
-        posts = self.get_queryset().filter(author=request.user)
-        serializer = PostSerializer(posts, many=True, context={"request": request})
+            raise PermissionDenied("You must be logged in to see which Posts are yours")        
+        instance = posts = self.get_queryset().filter(author=request.user)
+        page = self.paginate_queryset(posts)
+        if page is not None:
+            instance = page
+        serializer = PostSerializer(instance, many=True, context={"request": request})
+        
+        if page is not None:
+            return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
     
     @method_decorator(cache_page(120))
@@ -79,6 +86,9 @@ class PostViewSet(viewsets.ModelViewSet):
                     f"Time period {time_period_name} is not valid, should be "
                     f"'new', 'today' or 'week'"
                 )
+        
+        queryset = queryset.order_by("pk")
+        
         return queryset  
         
 
@@ -100,9 +110,15 @@ class TagViewSet(viewsets.ModelViewSet):
     @action(methods=["get"], detail=True, name="Posts with the Tag")
     def posts(self, request, pk=None):
         tag = self.get_object()
+        instance = page = self.paginate_queryset(tag.posts)
+        if page is None:
+            instance = tag.posts
         post_serializer = PostSerializer(
-            tag.posts, many=True, context={"request": request}
+            instance, many=True, context={"request": request}
         )
+        if page is not None:
+          
+            return self.get_paginated_response(post_serializer.data)
         return Response(post_serializer.data)
     
     @method_decorator(cache_page(300))

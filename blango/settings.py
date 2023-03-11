@@ -55,6 +55,7 @@ class Dev(Configuration):
         'django.contrib.messages',
         'django.contrib.sites',
         'django.contrib.staticfiles',
+        'django_filters',
         'crispy_forms', 
         'crispy_bootstrap5',
         'blango_auth',
@@ -74,7 +75,7 @@ class Dev(Configuration):
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
-        # 'django.middleware.csrf.CsrfViewMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -232,6 +233,11 @@ class Dev(Configuration):
             "user_sustained": "5000/day",
             "user_burst": "100/minute",
         },   
+        "DEFAULT_FILTER_BACKENDS": [
+            "django_filters.rest_framework.DjangoFilterBackend"
+        ],
+        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+        "PAGE_SIZE": 100,
     }
 
     SWAGGER_SETTINGS = {
