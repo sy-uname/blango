@@ -2,7 +2,7 @@ import logging
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from blog.models import Post, Tag, Comment
-
+from versatileimagefield.serializers import VersatileImageFieldSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +30,18 @@ class PostSerializer(serializers.ModelSerializer):
     author = serializers.HyperlinkedRelatedField(
         queryset=get_user_model().objects.all(), view_name="api_user_detail", lookup_field="email", required=False
     )
+    hero_image = VersatileImageFieldSerializer(
+        sizes=[
+            ("full_size", "url"),
+            ("thumbnail", "thumbnail__100x100"),
+            ("square_crop", "crop__200x200"),
+        ],
+        read_only=True,
+    )
     
     class Meta:
         model = Post
-        fields = "__all__"
+        exclude = ["ppoi"]
         readonly = [
             "modified_at", 
             "created_at", 
