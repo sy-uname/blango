@@ -13,3 +13,5 @@ blango_auth/__pycache__/
 blango_auth/migrations/__pycache__/
 blog/api/__pycache__/
 tests/__pycache__/
+media/__sized__/
+
