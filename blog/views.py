@@ -49,3 +49,7 @@ def post_detail(request, pk):
 def get_ip(request):
     return HttpResponse(request.META['REMOTE_ADDR'])
 
+
+def post_table(request):
+    return render(request, "blog/post-table.html")
+
