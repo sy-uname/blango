@@ -1,3 +1,19 @@
+['/', '/api/v1/posts/', '/abadurl/'].forEach(url => {
+  fetch(
+    url
+  ).then(response => {
+    if (response.status !== 200) {
+      throw new Error('Invalid status from server: ' + response.statusText)
+    }
+    return response.json()
+  }).then(data => {
+    // do something with data, for example
+    console.log(data)
+  }).catch(e => {
+    console.error(e)
+  })
+})
+
 class ClickButton extends React.Component {
   state = {
     wasClicked: false
@@ -45,24 +61,8 @@ class PostRow extends React.Component {
 
 class PostTable extends React.Component {
   state = {
-    dataLoaded: true,
-    data: {
-      results: [
-        {
-          id: 17,
-          tags: [
-            'django', 'react'
-          ],
-          'hero_image': {
-            'thumbnail': '/media/__sized__/hero_images/photo_1_2023-03-06_16-37-31-thumbnail-100x100-70.jpg',
-            'full_size': '/media/hero_images/photo_1_2023-03-06_16-37-31.jpg'
-          },
-          title: 'Test Post',
-          slug: 'test-post',
-          summary: 'A test post, created for Django/React.'
-        }
-      ]
-    }
+    dataLoaded: false,
+    data: null
   }
 
   render () {
@@ -79,10 +79,33 @@ class PostTable extends React.Component {
 
     return <table className="table table-striped table-bordered mt-2 text-light"><thead><tr><th>Title</th><th>Image</th><th>Tags</th><th>Slug</th><th>Summary</th><th>Link</th></tr></thead><tbody>{rows}</tbody></table>
   }
+
+  componentDidMount () {
+    fetch(this.props.url).then(response => {
+      if (response.status !== 200) {
+        throw new Error('Invalid status from server: ' + response.statusText)
+      }
+
+      return response.json()
+    }).then(data => {
+      this.setState({
+        dataLoaded: true,
+        data: data
+      })
+    }).catch(e => {
+      console.error(e)
+      this.setState({
+        dataLoaded: true,
+        data: {
+          results: []
+        }
+      })
+    })
+  }
 }
 
 ReactDOM.render(
-  React.createElement(PostTable),
+  React.createElement(PostTable,{url: postListUrl}),
   domContainer
 )
 
